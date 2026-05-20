@@ -9,12 +9,12 @@ WORKDIR /app
 RUN curl -L https://github.com/luvit/lit/raw/master/get-lit.sh | sh
 RUN mv luvi lit luvit /usr/local/bin/
 
-# Create the standard Luvit local modules directory
-RUN mkdir -p deps
+# Pre-create the exact target folders for your modules
+RUN mkdir -p deps/discordia deps/coro-http
 
-# Download and extract Discordia and Coro-Http directly from their master branches
-RUN curl -L https://github.com/SinisterRectus/discordia/archive/refs/heads/master.tar.gz | tar -xzf - -C deps/ && mv deps/discordia-master deps/discordia
-RUN curl -L https://github.com/luvit/coro-http/archive/refs/heads/master.tar.gz | tar -xzf - -C deps/ && mv deps/coro-http-master deps/coro-http
+# Download and extract directly into their folders, stripping the messy GitHub root folder name
+RUN curl -L https://github.com/SinisterRectus/discordia/archive/refs/heads/master.tar.gz | tar -xzf - -C deps/discordia --strip-components=1
+RUN curl -L https://github.com/luvit/coro-http/archive/refs/heads/master.tar.gz | tar -xzf - -C deps/coro-http --strip-components=1
 
 # Copy your bot source code into the container
 COPY . .
