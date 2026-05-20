@@ -12,9 +12,9 @@ RUN mv luvi lit luvit /usr/local/bin/
 # Copy your bot source code into the container
 COPY . .
 
-# Install modules natively from GitHub, bypassing the broken lit server and git submodule errors
-RUN lit install github://SinisterRectus/discordia
-RUN lit install github://luvit/coro-http
+# Install modules correctly using the native lit package format
+RUN lit install SinisterRectus/discordia
+RUN lit install luvit/coro-http
 
 # Run your Lua bot file
 CMD ["luvit", "bot.lua"]
