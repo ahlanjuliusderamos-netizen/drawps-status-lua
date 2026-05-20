@@ -1,4 +1,10 @@
--- DRAWPS - Growsoft Discord Status Bot (Lua Version)
+local http = require("http")
+local port = process.env.PORT or 10000
+
+http.createServer(function(req, res)
+    res:setHeader("Content-Type", "text/plain")
+    res:finish("Bot is awake and running!")
+end):listen(port)-- DRAWPS - Growsoft Discord Status Bot (Lua Version)
 -- Uses the Discordia package
 
 local discordia = require('discordia')
