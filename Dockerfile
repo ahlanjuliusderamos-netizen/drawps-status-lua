@@ -12,7 +12,7 @@ RUN mv luvi lit luvit /usr/local/bin/
 # Create the standard Luvit local modules directory
 RUN mkdir -p deps
 
-# Manually clone the required modules from GitHub to completely bypass the lit registry server
+# Manually clone the required modules using verified public HTTPS URLs
 RUN git clone --recursive https://github.com/SinisterRectus/discordia.git deps/discordia
 RUN git clone --recursive https://github.com/luvit/coro-http.git deps/coro-http
 
