@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-# Install dependencies needed to download Luvit and clone git repositories
+# Install dependencies needed to download Luvit
 RUN apt-get update && apt-get install -y curl git make gcc build-essential libssl-dev
 
 WORKDIR /app
@@ -9,18 +9,12 @@ WORKDIR /app
 RUN curl -L https://github.com/luvit/lit/raw/master/get-lit.sh | sh
 RUN mv luvi lit luvit /usr/local/bin/
 
-# Create the standard Luvit local modules directory
-RUN mkdir -p deps
-
-# Tell Git to rewrite old SSH submodule links to public HTTPS links (bypasses username prompt)
-RUN git config --global url."https://github.com/".insteadOf "git@github.com:"
-
-# Manually clone the required modules recursively with all dependencies included
-RUN git clone --recursive https://github.com/SinisterRectus/discordia.git deps/discordia
-RUN git clone --recursive https://github.com/luvit/coro-http.git deps/coro-http
-
 # Copy your bot source code into the container
 COPY . .
+
+# Install modules natively from GitHub, bypassing the broken lit server and git submodule errors
+RUN lit install github://SinisterRectus/discordia
+RUN lit install github://luvit/coro-http
 
 # Run your Lua bot file
 CMD ["luvit", "bot.lua"]
