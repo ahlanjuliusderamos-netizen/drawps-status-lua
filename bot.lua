@@ -5,6 +5,7 @@ local discordia = require('discordia')
 local client = discordia.Client()
 local http = require('coro-http') -- Used for making API fetch requests
 local json = require('json')     -- Used for parsing API data
+local timer = require('timer')    -- Built-in Luvit timer module for loops
 
 -- ==================== CONFIGURATION ====================
 local CONFIG = {
@@ -113,11 +114,13 @@ end
 client:on('ready', function()
     print('Logged in as ' .. client.user.tag)
     
-    -- Run update loop inside a cooperative thread
-    client:setInterval(CONFIG.updateInterval, function()
-        coroutine.wrap(refreshStatus)()
-    end)
-    coroutine.wrap(refreshStatus)()
+    -- Proper Lua loop handling for periodic tasks
+    coroutine.wrap(function()
+        while true do
+            refreshStatus()
+            timer.sleep(CONFIG.updateInterval)
+        end
+    end)()
 end)
 
 if CONFIG.discordToken then
