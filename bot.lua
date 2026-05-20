@@ -103,7 +103,7 @@ local function refreshStatus()
         
         if botMsg then
             statusMessage = botMsg
-            statusMessage:edit({ content = "", embed = statusEmbed })
+            statusMessage:update({ content = "", embed = statusEmbed })
         else
             statusMessage = channel:send({ embed = statusEmbed })
         end
