@@ -89,7 +89,7 @@ local function refreshStatus()
     }
     
     if statusMessage then
-        statusMessage:edit({ content = "", embed = statusEmbed })
+    statusMessage:update({ content = "", embed = statusEmbed })
     else
         -- Check recent channel history to avoid duplicating messages
         local messages = channel:getMessages(10)
