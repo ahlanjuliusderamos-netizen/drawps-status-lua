@@ -15,7 +15,6 @@ COPY . .
 # Install the required Discordia modules
 RUN lit install SinisterRectus/discordia
 RUN lit install luvit/coro-http
-RUN lit install creativecreatures/json
 
 # Run your Lua bot file
 CMD ["luvit", "bot.lua"]
