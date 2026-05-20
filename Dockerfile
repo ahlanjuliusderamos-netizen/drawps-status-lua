@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-# Install dependencies needed to download Luvit and unpack tarballs
+# Install dependencies needed to download Luvit and clone git repositories
 RUN apt-get update && apt-get install -y curl git make gcc build-essential libssl-dev
 
 WORKDIR /app
@@ -9,12 +9,15 @@ WORKDIR /app
 RUN curl -L https://github.com/luvit/lit/raw/master/get-lit.sh | sh
 RUN mv luvi lit luvit /usr/local/bin/
 
-# Pre-create the exact target folders for your modules
-RUN mkdir -p deps/discordia deps/coro-http
+# Create the standard Luvit local modules directory
+RUN mkdir -p deps
 
-# Download and extract directly into their folders, stripping the messy GitHub root folder name
-RUN curl -L https://github.com/SinisterRectus/discordia/archive/refs/heads/master.tar.gz | tar -xzf - -C deps/discordia --strip-components=1
-RUN curl -L https://github.com/luvit/coro-http/archive/refs/heads/master.tar.gz | tar -xzf - -C deps/coro-http --strip-components=1
+# Tell Git to rewrite old SSH submodule links to public HTTPS links (bypasses username prompt)
+RUN git config --global url."https://github.com/".insteadOf "git@github.com:"
+
+# Manually clone the required modules recursively with all dependencies included
+RUN git clone --recursive https://github.com/SinisterRectus/discordia.git deps/discordia
+RUN git clone --recursive https://github.com/luvit/coro-http.git deps/coro-http
 
 # Copy your bot source code into the container
 COPY . .
