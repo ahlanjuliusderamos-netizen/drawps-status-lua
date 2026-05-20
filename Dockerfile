@@ -5,8 +5,8 @@ RUN apt-get update && apt-get install -y curl git make gcc build-essential libss
 
 WORKDIR /app
 
-# Install Luvit runtime environment
-RUN curl -L https://lit.luvit.io/packages/luvit/stable/linux/amd64 | sh
+# Install Luvit runtime environment using the official universal installer script
+RUN curl -L https://github.com/luvit/lit/raw/master/get-lit.sh | sh
 RUN mv luvi lit luvit /usr/local/bin/
 
 # Copy your bot source code into the container
